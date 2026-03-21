@@ -1,0 +1,33 @@
+name: AJ Real Estate Property Sync
+
+on:
+  schedule:
+    - cron: '0 9 */2 * *'   # Every 2 days at 9:00 AM UTC
+  workflow_dispatch:          # Also allows manual trigger from GitHub dashboard
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run sync agent
+        env:
+          BOTPRESS_API_TOKEN: ${{ secrets.BOTPRESS_API_TOKEN }}
+          BOTPRESS_BOT_ID: ${{ secrets.BOTPRESS_BOT_ID }}
+          BOTPRESS_TABLE_ID: ${{ secrets.BOTPRESS_TABLE_ID }}
+          WP_BASE_URL: ${{ secrets.WP_BASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: node agent.js
