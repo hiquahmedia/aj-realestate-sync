@@ -196,12 +196,20 @@ async function upsertRows(rows) {
 // ─── Compare two row objects — returns list of changed field names ─────────────
 const TRACKED_FIELDS = ['title', 'PropertyType', 'price', 'Location', 'RentSale', 'link', 'bedrooms', 'bathrooms', 'size', 'lotSize'];
 
+function normalize(v) {
+  // Collapse all whitespace (including non-breaking spaces) to single spaces
+  return (v ?? '').toString()
+    .replace(/[ ​ ﻿]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function findChanges(existing, incoming) {
-  return TRACKED_FIELDS.filter(f => {
-    const a = (existing[f] ?? '').toString().trim();
-    const b = (incoming[f] ?? '').toString().trim();
-    return a !== b;
-  });
+  const changed = TRACKED_FIELDS.filter(f => normalize(existing[f]) !== normalize(incoming[f]));
+  if (changed.length > 0) {
+    changed.forEach(f => console.log(`      [diff] ${f}: "${normalize(existing[f])}" → "${normalize(incoming[f])}"`));
+  }
+  return changed;
 }
 
 // ─── Main agent ───────────────────────────────────────────────────────────────
