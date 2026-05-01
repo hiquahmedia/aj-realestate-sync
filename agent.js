@@ -104,7 +104,7 @@ async function scrapeListingDetails(url) {
       bedrooms: details['bedrooms'] || '',
       bathrooms: details['bathrooms'] || '',
       size: details['property size'] || details['built-up area'] || '',
-      lotSize: details['lot size'] || '',
+      lotSize: details['lot size'] || details['lot-size'] || details['land size'] || details['plot size'] || details['ground area'] || '',
     };
   } catch {
     return { price: 'Contact for price', bedrooms: '', bathrooms: '', size: '', lotSize: '' };
