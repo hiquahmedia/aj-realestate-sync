@@ -194,7 +194,7 @@ async function upsertRows(rows) {
 }
 
 // ─── Compare two row objects — returns list of changed field names ─────────────
-const TRACKED_FIELDS = ['title', 'PropertyType', 'price', 'Location', 'RentSale', 'link', 'bedrooms', 'bathrooms', 'size', 'lotSize'];
+const TRACKED_FIELDS = ['title', 'PropertyType', 'price', 'Location', 'RentSale', 'link'];
 
 function normalize(v) {
   // Collapse all whitespace (including non-breaking spaces) to single spaces
